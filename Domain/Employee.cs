@@ -2,6 +2,7 @@
 
 namespace Domain
 {
+    // Employee Domain Entities
     public class Employee
     {
         [BsonId]

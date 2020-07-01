@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Application
 {
+    // Interface declaration for Employee Service
     public interface IEmployeeService
     {
 

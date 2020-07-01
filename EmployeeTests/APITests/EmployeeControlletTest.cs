@@ -66,7 +66,7 @@ namespace EmployeeTests.APITests
         }
 
         [TestMethod]
-        public void GetClientByIdReturnOkResult()
+        public void GetEmployeeByIdResultOk()
         {
             var employeeId = "01_Id1";
             var employee = new Employee
@@ -148,6 +148,32 @@ namespace EmployeeTests.APITests
 
             Assert.IsInstanceOfType(response, typeof(NoContentResult));
         }
+        
+        [TestMethod]
+        public void UpdateEmployeeOkResult()
+        {
+            var employeeId = "001_ID01";
+
+            var oldEmployee = new EmployeeViewModel
+            {
+                Id = "001_ID01",
+                FirstName = "Mairaj",
+                LastName = "Ameena",
+                Department = "Dept1",
+                PhoneNumber = 9538540587,
+                Designation = "Senior Software Engineer",
+                Country = "India",
+                City = "Bangalore",
+                Address = "MileStone Calidad"
+            };
+
+            _mockEmployeeService.Setup(repo => repo.UpdateEmployeeDetails(It.IsAny<Employee>(), employeeId)).Returns(Task.FromResult(true));
+
+            var response = _employeeController.Put(employeeId, oldEmployee).Result;
+
+            Assert.IsInstanceOfType(response, typeof(NoContentResult));
+
+        }
         // Negative test cases
 
         [TestMethod]
@@ -177,6 +203,57 @@ namespace EmployeeTests.APITests
             var response = _employeeController.Delete(employeeId).Result;
 
             Assert.IsInstanceOfType(response, typeof(NotFoundResult));
+        }
+
+        [TestMethod]
+        public void UpdateEmployeeBadRequest()
+        {
+            var employeeId = "001_ID02";
+
+            var oldEmployee = new EmployeeViewModel
+            {
+                Id = "001_ID",
+                FirstName = "Mairaj",
+                LastName = "Ameena",
+                Department = "Dept1",
+                PhoneNumber = 9538540587,
+                Designation = "Senior Software Engineer",
+                Country = "India",
+                City = "Bangalore",
+                Address = "MileStone Calidad"
+            };
+
+            var response = _employeeController.Put(employeeId, oldEmployee).Result;
+
+            Assert.IsInstanceOfType(response, typeof(BadRequestResult));
+
+        }
+
+
+        [TestMethod]
+        public void UpdateEmployeeNotFound()
+        {
+            var employeeId = "001_ID02";
+
+            var oldEmployee = new EmployeeViewModel
+            {
+                Id = "001_ID02",
+                FirstName = "Mairaj",
+                LastName = "Ameena",
+                Department = "Dept1",
+                PhoneNumber = 9538540587,
+                Designation = "Senior Software Engineer",
+                Country = "India",
+                City = "Bangalore",
+                Address = "MileStone Calidad"
+            };
+
+            _mockEmployeeService.Setup(repo => repo.UpdateEmployeeDetails(It.IsAny<Employee>(), employeeId)).Returns(Task.FromResult(false));
+
+            var response = _employeeController.Put(employeeId, oldEmployee).Result;
+
+            Assert.IsInstanceOfType(response, typeof(NotFoundResult));
+
         }
 
     }
