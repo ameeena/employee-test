@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\EmployeeApp\EmployeeAPI.csproj" />
+    <ProjectReference Include="..\EmployeeApp\EmployeeApp.csproj" />
   </ItemGroup>
 
 </Project>

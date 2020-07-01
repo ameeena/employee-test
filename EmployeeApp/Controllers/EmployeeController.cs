@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Application;
 using Domain;
+using EmployeeApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -8,21 +9,29 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeApp.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// Employee Controller class for processing API requests
+    /// </summary>
+    [Route("api/employee")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
 
         /// <summary>
-        /// 
+        /// Contructor initialization
         /// </summary>
         /// <param name="employeeService"></param>
         public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
-        // GET: api/Employee
+
+        /// <summary>
+        /// Get Employee Details
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/employee
         [EnableCors("AllowOrigin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,7 +41,12 @@ namespace EmployeeApp.Controllers
             return Ok(employeesList);
         }
 
-        // GET: api/Employee/5
+        /// <summary>
+        /// Get Employee By ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/employee/5
         [EnableCors("AllowOrigin")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,7 +54,6 @@ namespace EmployeeApp.Controllers
         public async Task<IActionResult> Get(string id)
         {
             var employee = await _employeeService.GetEmployeeById(id);
-
             if(employee == null)
             {
                 return NotFound();
@@ -48,26 +61,43 @@ namespace EmployeeApp.Controllers
             return Ok(employee);
         }
 
-        // POST: api/Employee
+        /// <summary>
+        /// Add an employee
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        // POST: api/employee
         [Authorize]
         [EnableCors("AllowOrigin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Post([FromBody] Employee employee)
+        public async Task<IActionResult> Post([FromBody] EmployeeViewModel employee)
         {
-            var createdEmployee = await _employeeService.AddEmployee(employee);
+            var employeeData = ConvertEmployeeModelToEmployee(employee);
+            var createdEmployee = await _employeeService.AddEmployee(employeeData);
 
             return CreatedAtAction(nameof(Get), new { employeeId = createdEmployee.Id }, createdEmployee);
         }
 
-        // PUT: api/Employee/5
+
+        /// <summary>
+        /// Update employee details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        // PUT: api/employee/5
         [EnableCors("AllowOrigin")]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE: api/ApiWithActions/5
+        /// <summary>
+        /// Delete Employee based on ID
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        // DELETE: api/employee/5
         [EnableCors("AllowOrigin")]
         [HttpDelete("{employeeId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -85,6 +115,23 @@ namespace EmployeeApp.Controllers
                 // 404 error
                 return NotFound();
             }
+        }
+
+        /// <summary>
+        /// Convert employee view model to employee model class
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        private Employee ConvertEmployeeModelToEmployee(EmployeeViewModel employee)
+        {
+            var employeeData = new Employee
+            {
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Department = employee.Department
+            };
+
+            return employeeData;
         }
     }
 }

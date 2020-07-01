@@ -1,13 +1,11 @@
 ﻿using Application;
 using Domain;
 using EmployeeApp.Controllers;
-using Infrastructure;
+using EmployeeApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EmployeeTests.APITests
@@ -51,14 +49,14 @@ namespace EmployeeTests.APITests
                 }
             };
 
-            //set-up
+            //arrange
             _mockEmployeeService.Setup(repo => repo.GetEmployees()).Returns(Task.FromResult(employees));
             // Act
             var response = _employeeController.Get().Result;
             var contentResult = response as OkObjectResult;
             var employeeList = contentResult.Value as List<Employee>;
 
-
+            //Assert
             Assert.IsNotNull(contentResult);
             Assert.IsInstanceOfType(contentResult.Value, typeof(List<Employee>));
             Assert.AreEqual(3, employeeList.Count);
@@ -79,11 +77,11 @@ namespace EmployeeTests.APITests
             _mockEmployeeService.Setup(repo => repo.GetEmployeeById(employeeId)).Returns(Task.FromResult(employee));
 
             //Get
-
             var response = _employeeController.Get(employeeId).Result;
             var contentResult = response as OkObjectResult;
             var recivedEmployee = contentResult.Value as Employee;
 
+            //Assert
             Assert.IsNotNull(recivedEmployee);
             Assert.IsInstanceOfType(contentResult.Value, typeof(Employee));
             Assert.AreEqual(employeeId, recivedEmployee.Id);
@@ -93,7 +91,13 @@ namespace EmployeeTests.APITests
         public void AddEmployeeOkResult()
         {
             var expectedEmployeeId = "001_ID1";
-            var newEmployee = new Employee
+            var newEmployee = new EmployeeViewModel
+            {
+                FirstName = "Mairaj",
+                LastName = "Ameena",
+                Department = "Dept1"
+            };
+            var employee = new Employee
             {
                 Id = "001_ID1",
                 FirstName = "Mairaj",
@@ -102,10 +106,9 @@ namespace EmployeeTests.APITests
             };
 
             //Set up
-            _mockEmployeeService.Setup(repo => repo.AddEmployee(newEmployee)).Returns(Task.FromResult(newEmployee));
+            _mockEmployeeService.Setup(repo => repo.AddEmployee(It.IsAny<Employee>())).Returns(Task.FromResult(employee));
 
             //Get
-
             var response = _employeeController.Post(newEmployee).Result;
             Assert.IsInstanceOfType(response, typeof(CreatedAtActionResult));
 
@@ -128,5 +131,35 @@ namespace EmployeeTests.APITests
             Assert.IsInstanceOfType(response, typeof(NoContentResult));
         }
         // Negative test cases
+
+        [TestMethod]
+        // Employee does not exist
+        public void GetEmployeeByIdNotFoundResult()
+        {
+            var employeeId = "01_Id1";
+
+            _mockEmployeeService.Setup(repo => repo.GetEmployeeById(employeeId)).
+                Returns(Task.FromResult((Employee)null));
+
+            //Get
+            var response = _employeeController.Get(employeeId).Result;
+
+            Assert.IsInstanceOfType(response, typeof(NotFoundResult));
+        }
+
+        [TestMethod]
+        // delete employee that does not exist
+        public void DeleteEmployeeNotFoundResult()
+        {
+            var employeeId = "01_Id1";
+
+            _mockEmployeeService.Setup(repo => repo.RemoveEmployee(employeeId)).
+                Returns(Task.FromResult(false));
+            //Get
+            var response = _employeeController.Delete(employeeId).Result;
+
+            Assert.IsInstanceOfType(response, typeof(NotFoundResult));
+        }
+
     }
 }
