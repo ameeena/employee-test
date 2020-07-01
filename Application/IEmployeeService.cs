@@ -15,5 +15,7 @@ namespace Application
 
         public Task<Employee> GetEmployeeById(string employeeId);
 
+        public Task<bool> UpdateEmployeeDetails(Employee employee, string employeeId);
+
     }
 }

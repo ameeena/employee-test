@@ -6,6 +6,10 @@
     public class EmployeeViewModel
     {
         /// <summary>
+        /// Id for Employee
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
         ///  First Name
         /// </summary>
         public string FirstName { get; set; }

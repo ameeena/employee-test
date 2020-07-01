@@ -84,12 +84,26 @@ namespace EmployeeApp.Controllers
         /// Update employee details
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="value"></param>
+        /// <param name="employeeViewModel"></param>
         // PUT: api/employee/5
+        [Authorize]
         [EnableCors("AllowOrigin")]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(string id, [FromBody] EmployeeViewModel employeeViewModel)
         {
+            if(id != employeeViewModel.Id)
+            {
+                return BadRequest();
+            }
+            var employee = ConvertEmployeeModelToEmployee(employeeViewModel);
+            var result = await _employeeService.UpdateEmployeeDetails(employee, id);
+
+            // Not Found and Upadted 
+            if(!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
 
         /// <summary>
@@ -126,6 +140,7 @@ namespace EmployeeApp.Controllers
         {
             var employeeData = new Employee
             {
+                Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Department = employee.Department,

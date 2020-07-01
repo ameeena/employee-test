@@ -56,5 +56,19 @@ namespace Infrastructure
             var result = _employeeContext.Employees.DeleteOne(employee => employee.Id == employeeId);
             return result.DeletedCount == 1 ? Task.FromResult(true) : Task.FromResult(false);
         }
+
+        /// <summary>
+        /// Updating employee details
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Task<bool> UpdateEmployeeDetails(Employee employee, string employeeId)
+        {
+            var result = _employeeContext.Employees.ReplaceOne(employee => employee.Id == employeeId, employee);
+
+            return result.ModifiedCount == 1 ? Task.FromResult(true) : Task.FromResult(false);
+
+        }
     }
 }
