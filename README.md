@@ -18,6 +18,7 @@ The solution has been created using visual studio 2019 (Version > 16.2) Respecti
 4. If needed restore all the the Nuget packages
 5. The application uses Mongo DB for database operations update your Mongo DB spec details in the appsettings.json file
 6. The application uses Auth0 for authentication, update Domain and ApiIdentifier in the appsettings.json file
+7. Unit test cases are updated for the controller class using MS test
 
 To get the Domain and API identifier details please follow the steps mentioned here :
 https://auth0.com/docs/quickstart/backend/aspnet-core-webapi
@@ -28,8 +29,8 @@ https://auth0.com/docs/quickstart/backend/aspnet-core-webapi
 2. To try out functionality : set the EmployeeApp as start-up project and run the application
 3. Since Swagger UI is used a default browser will pop-up in your browser with API specification
 4. Please use the API specifications to test the Employee App APIs
-5. Post and Delete operations are authorized using Auth0
-6. To access the API key for the Post and Delete Operations please find the steps below
+5. Put,Post and Delete operations are authorized using Auth0
+6. To access the API key for the Put, Post and Delete Operations please find the steps below
 
    - send a post request to the Auth0 based on your domain name
    - POST https://my-domain.auth0.com/oauth/token
@@ -43,5 +44,6 @@ https://auth0.com/docs/quickstart/backend/aspnet-core-webapi
      client_id: "**\***"
      client_secret: "**\***"
 
-7. Once API key is obtained add it in the header in the swagger UI
-8. Once authorization is successfull Add and Remove Employee will also be possible
+7. Once API key is obtained add it in the header in the swagger UI as - Bearer API_KEY and authorize
+8. Once authorization is successfull Add, Update and Remove Employee will also be possible.
+   
