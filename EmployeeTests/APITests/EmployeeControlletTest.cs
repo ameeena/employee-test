@@ -31,21 +31,24 @@ namespace EmployeeTests.APITests
                     Id = "01_Id1",
                     FirstName= "Mairaj",
                     LastName = "Ameena",
-                    Department = "Dept1"
+                    Department = "Dept1",
+                    PhoneNumber = 9538540587,
+                    Designation = "Senior Software Engineer",
+                    Country = "India",
+                    City = "Bangalore",
+                    Address = "MileStone Calidad"
                 },
                 new Employee
                 {
                     Id = "02_Id2",
                     FirstName= "Farheen",
                     LastName = "Khan",
-                    Department = "Dept2"
-                },
-                new Employee
-                {
-                    Id = "03_Id3",
-                    FirstName= "FirstName1",
-                    LastName = "LastName2",
-                    Department = "Dept3"
+                    Department = "Dept2",
+                    PhoneNumber = 123456789,
+                    Address = "Earth",
+                    City = "Bangalore",
+                    Country = "India",
+                    Designation = "Software Engineer"
                 }
             };
 
@@ -59,7 +62,7 @@ namespace EmployeeTests.APITests
             //Assert
             Assert.IsNotNull(contentResult);
             Assert.IsInstanceOfType(contentResult.Value, typeof(List<Employee>));
-            Assert.AreEqual(3, employeeList.Count);
+            Assert.AreEqual(2, employeeList.Count);
         }
 
         [TestMethod]
@@ -71,7 +74,12 @@ namespace EmployeeTests.APITests
                 Id = "01_Id1",
                 FirstName = "Mairaj",
                 LastName = "Ameena",
-                Department = "Dept1"
+                Department = "Dept1",
+                PhoneNumber = 9538540587,
+                Designation = "Senior Software Engineer",
+                Country = "India",
+                City = "Bangalore",
+                Address = "MileStone Calidad"
             };
 
             _mockEmployeeService.Setup(repo => repo.GetEmployeeById(employeeId)).Returns(Task.FromResult(employee));
@@ -90,19 +98,29 @@ namespace EmployeeTests.APITests
         [TestMethod]
         public void AddEmployeeOkResult()
         {
-            var expectedEmployeeId = "001_ID1";
+            var expectedEmployeeId = "01_Id1";
             var newEmployee = new EmployeeViewModel
             {
                 FirstName = "Mairaj",
                 LastName = "Ameena",
-                Department = "Dept1"
+                Department = "Dept1",
+                PhoneNumber = 9538540587,
+                Designation = "Senior Software Engineer",
+                Country = "India",
+                City = "Bangalore",
+                Address = "MileStone Calidad"
             };
             var employee = new Employee
             {
-                Id = "001_ID1",
+                Id = "01_Id1",
                 FirstName = "Mairaj",
                 LastName = "Ameena",
-                Department = "Dept1"
+                Department = "Dept1",
+                PhoneNumber = 9538540587,
+                Designation = "Senior Software Engineer",
+                Country = "India",
+                City = "Bangalore",
+                Address = "MileStone Calidad"
             };
 
             //Set up

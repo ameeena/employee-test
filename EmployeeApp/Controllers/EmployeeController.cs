@@ -76,7 +76,7 @@ namespace EmployeeApp.Controllers
             var employeeData = ConvertEmployeeModelToEmployee(employee);
             var createdEmployee = await _employeeService.AddEmployee(employeeData);
 
-            return CreatedAtAction(nameof(Get), new { employeeId = createdEmployee.Id }, createdEmployee);
+            return CreatedAtAction(nameof(Get), new { employeeId = createdEmployee.Id.ToString() }, createdEmployee);
         }
 
 
@@ -128,7 +128,12 @@ namespace EmployeeApp.Controllers
             {
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Department = employee.Department
+                Department = employee.Department,
+                Address = employee.Address,
+                City = employee.City,
+                Country = employee.Country,
+                Designation = employee.Designation,
+                PhoneNumber = employee.PhoneNumber
             };
 
             return employeeData;

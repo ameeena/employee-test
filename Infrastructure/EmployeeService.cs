@@ -8,13 +8,10 @@ namespace Infrastructure
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IMongoCollection<Employee> _employees;
+        private readonly EmployeeContext _employeeContext;
         public EmployeeService(IDbConfig dbConfig)
         {
-            var mongoClient = new MongoClient(dbConfig.DbConnectionString);
-            var db = mongoClient.GetDatabase(dbConfig.DbName);
-
-            _employees = db.GetCollection<Employee>(dbConfig.EmployeeCollectionName);
+            _employeeContext = new EmployeeContext(dbConfig);
         }
 
         /// <summary>
@@ -24,7 +21,7 @@ namespace Infrastructure
         /// <returns></returns>
         public Task<Employee> AddEmployee(Employee employee)
         {
-            _employees.InsertOne(employee);
+            _employeeContext.Employees.InsertOneAsync(employee);
             return Task.FromResult(employee);
         }
 
@@ -35,7 +32,7 @@ namespace Infrastructure
         /// <returns></returns>
         public Task<Employee> GetEmployeeById(string employeeId)
         {
-            var employee  = _employees.Find(employee => employee.Id == employeeId).FirstOrDefault();
+            var employee  = _employeeContext.Employees.Find(employee => employee.Id == employeeId).FirstOrDefault();
             return Task.FromResult(employee);
         }
 
@@ -45,7 +42,7 @@ namespace Infrastructure
         /// <returns></returns>
         public Task<List<Employee>> GetEmployees()
         {
-            var employeesList = _employees.Find(employee => true).ToList();
+            var employeesList = _employeeContext.Employees.Find(employee => true).ToList();
             return Task.FromResult(employeesList);
         }
 
@@ -56,9 +53,8 @@ namespace Infrastructure
         /// <returns></returns>
         public Task<bool> RemoveEmployee(string employeeId)
         {
-            var result = _employees.DeleteOne(employee => employee.Id == employeeId);
+            var result = _employeeContext.Employees.DeleteOne(employee => employee.Id == employeeId);
             return result.DeletedCount == 1 ? Task.FromResult(true) : Task.FromResult(false);
-
         }
     }
 }
