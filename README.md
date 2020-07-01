@@ -16,7 +16,8 @@ The solution has been created using visual studio 2019 (Version > 16.2) Respecti
 2. Download and install .NET core 3.1 SDK
 3. Clone or download the project
 4. If needed restore all the the Nuget packages
-5. The application uses Auth0 for authentication, update Domain and ApiIdentifier in the appsettings.json file
+5. The application uses Mongo DB for database operations update your Mongo DB spec details in the appsettings.json file
+6. The application uses Auth0 for authentication, update Domain and ApiIdentifier in the appsettings.json file
 
 To get the Domain and API identifier details please follow the steps mentioned here :
 https://auth0.com/docs/quickstart/backend/aspnet-core-webapi
